@@ -1,6 +1,6 @@
 # Insurance Automation Demo
 
-A C#/.NET automated testing scaffold for an insurance-themed web app and API. The structure mirrors what a Senior SDET might build at a company like Vertafore: API-first coverage, database assertions, reusable fixtures, and a small amount of UI automation.
+A C#/.NET automated testing scaffold for an insurance-themed web app and API.
 
 ## What This Project Is
 
@@ -63,14 +63,10 @@ Start SQL Server and create the database:
 
 ```bash
 docker compose up -d
-# Wait ~10 seconds for SQL Server to start, then run (against master):
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -C -i sql/init-db.sql
-# Then run schema and seed against InsuranceDemo:
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/schema.sql
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/seed.sql
+# Wait ~10 seconds for SQL Server to start
 ```
 
-If you have **Azure Data Studio** or **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
+Using **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
 
 ### 2. API (.NET 8)
 
