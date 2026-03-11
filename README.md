@@ -70,7 +70,7 @@ docker compose up -d
 # sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/seed.sql
 ```
 
-If you have **Azure Data Studio** or **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
+Using **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
 
 ### 2. API (.NET 8)
 
