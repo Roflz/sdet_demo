@@ -63,11 +63,7 @@ Start SQL Server and create the database:
 
 ```bash
 docker compose up -d
-# Wait ~10 seconds for SQL Server to start, then run (against master):
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -C -i sql/init-db.sql
-# Then run schema and seed against InsuranceDemo:
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/schema.sql
-# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/seed.sql
+# Wait ~10 seconds for SQL Server to start
 ```
 
 Using **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
