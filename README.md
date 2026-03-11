@@ -1,6 +1,6 @@
 # Insurance Automation Demo
 
-A C#/.NET automated testing scaffold for an insurance-themed web app and API. The structure mirrors what a Senior SDET might build at a company like Vertafore: API-first coverage, database assertions, reusable fixtures, and a small amount of UI automation.
+A C#/.NET automated testing scaffold for an insurance-themed web app and API.
 
 ## What This Project Is
 
