@@ -11,6 +11,11 @@ namespace InsuranceAutomationDemo.ApiTests;
 /// API to be running. The API must validate required fields (e.g. FirstName, LastName, Email) and return 400
 /// when they are missing or invalid.
 /// </summary>
+/// <remarks>
+/// xUnit injects ApiTestFixture into the constructor; the class stores the fixture's ApiClient in _api. Each
+/// test builds a request (via CustomerFactory), sends it with _api.PostCustomerAsync, and asserts on the
+/// response status and body. The API and a writable database are required for the success test.
+/// </remarks>
 public class CustomersApiTests : IClassFixture<ApiTestFixture>
 {
     // ApiClient is from Shared.Clients. It is the wrapper that sends HTTP requests to the API (using BaseUrl and

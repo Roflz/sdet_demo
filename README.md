@@ -9,7 +9,7 @@ A C#/.NET automated testing scaffold for an insurance-themed web app and API. Th
 - **UI tests** – Minimal Selenium layer (WebDriver factory, base/login/quote pages, 1–2 smoke tests).
 - **Shared** – Config, models, API client, DB helper, and test data factories used by both API and UI tests.
 
-Tests are scaffolded so they are ready to run against a real service and database once URLs and connection strings are configured. **A full description of every test** (what it does, what it asserts, and what it depends on) is in [docs/TEST_CATALOG.md](docs/TEST_CATALOG.md).
+Tests are scaffolded so they are ready to run against a real service and database once URLs and connection strings are configured. How the API tests are executed, where config comes from, and how the fixture and test classes fit together are described in [docs/HOW_TO_READ_THE_API_TESTS.md](docs/HOW_TO_READ_THE_API_TESTS.md). A full description of every test (what it does, what it asserts, and what it depends on) is in [docs/TEST_CATALOG.md](docs/TEST_CATALOG.md).
 
 ## Why Most Coverage Is at the API Layer
 
@@ -167,6 +167,7 @@ InsuranceAutomationDemo/
   .github/workflows/
     ci.yml
   docs/
+    HOW_TO_READ_THE_API_TESTS.md   # How the API tests run, where config comes from, test map, glossary
     TEST_CATALOG.md   # Detailed description of every test
   README.md
 ```

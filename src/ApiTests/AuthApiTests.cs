@@ -12,6 +12,11 @@ namespace InsuranceAutomationDemo.ApiTests;
 /// or invalid caller. The API is expected to return 401 Unauthorized when auth is required and no valid
 /// Bearer token is sent. If the API does not yet enforce auth, the test accepts 404 or 200 as well.
 /// </summary>
+/// <remarks>
+/// Each test loads config from the test output directory, clears the token, and builds an ApiClient that sends
+/// requests with no Authorization header. The test then calls the API and asserts on the status code. The API
+/// must be running; BaseApiUrl in appsettings.json must point at it.
+/// </remarks>
 public class AuthApiTests
 {
     /// <summary>

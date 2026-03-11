@@ -7,6 +7,11 @@ namespace InsuranceAutomationDemo.ApiTests;
 /// Currently contains one test: requesting a nonexistent policy by Id and asserting the API returns 404 Not
 /// Found. Requires the API to be running; no specific data is required (we use an Id that is assumed not to exist).
 /// </summary>
+/// <remarks>
+/// The constructor receives ApiTestFixture and stores its ApiClient in _api. The test calls _api.GetPolicyAsync
+/// with a high Id (999999) that is assumed not to exist in the database, and asserts the response status is 404.
+/// Only the API need be running.
+/// </remarks>
 public class PoliciesApiTests : IClassFixture<ApiTestFixture>
 {
     // Shared ApiClient from the fixture (Shared.Clients), configured with BaseUrl and AuthToken from appsettings.json.

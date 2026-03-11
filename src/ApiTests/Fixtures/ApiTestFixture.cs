@@ -13,6 +13,11 @@ namespace InsuranceAutomationDemo.ApiTests.Fixtures;
 /// can send requests without repeating setup. IDisposable is implemented for xUnit cleanup; HttpClient is not
 /// explicitly disposed here. Used by CustomersApiTests, QuotesApiTests, PoliciesApiTests, and DatabaseValidationTests.
 /// </summary>
+/// <remarks>
+/// The constructor runs once per test class that uses this fixture. It resolves the test output directory,
+/// loads TestConfig from appsettings.json, and constructs ApiClient with that config. The test class receives
+/// the fixture and uses fixture.ApiClient for all HTTP calls in its [Fact] methods.
+/// </remarks>
 public class ApiTestFixture : IDisposable
 {
     // ApiClient (Shared.Clients) is the type that wraps HttpClient and sends requests to the API. It uses BaseUrl

@@ -14,6 +14,12 @@ namespace InsuranceAutomationDemo.ApiTests.Fixtures;
 /// their class's InitializeAsync); it is available for other test classes that want a shared DbHelper via
 /// IClassFixture&lt;DatabaseFixture&gt;.
 /// </summary>
+/// <remarks>
+/// When a test class uses IClassFixture&lt;DatabaseFixture&gt;, xUnit creates the fixture and calls InitializeAsync
+/// before running tests. The fixture loads config and creates DbHelper from DatabaseConnectionString; the test
+/// class receives the fixture and uses fixture.Db to run SQL. DatabaseValidationTests does not use this fixture;
+/// it creates its own DbHelper in its own InitializeAsync.
+/// </remarks>
 public class DatabaseFixture : IAsyncLifetime
 {
     // DbHelper (Shared.Database) is a class that takes a SQL Server connection string and provides methods like

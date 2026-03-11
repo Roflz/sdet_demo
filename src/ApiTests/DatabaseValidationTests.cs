@@ -16,6 +16,11 @@ namespace InsuranceAutomationDemo.ApiTests;
 /// in appsettings.json to point at the same database the API uses. Some tests assume seed data (e.g. customer 1,
 /// policy 1) or data created by the API during the test.
 /// </summary>
+/// <remarks>
+/// xUnit injects ApiTestFixture and calls InitializeAsync before any test; _db is set from DatabaseConnectionString
+/// when present. Tests use _api for HTTP calls and _db for SQL (RecordExistsAsync, GetQuoteByIdAsync, etc.). Tests
+/// that need the DB return immediately when _db is null; the test that only runs a JOIN also returns when _db is null.
+/// </remarks>
 public class DatabaseValidationTests : IClassFixture<ApiTestFixture>, IAsyncLifetime
 {
     // ApiClient from Shared.Clients—same as other API test classes; comes from the fixture so we can call the API.

@@ -10,6 +10,11 @@ namespace InsuranceAutomationDemo.ApiTests;
 /// Requires the API to be running and at least one customer to exist (e.g. Id 1 from sql/seed.sql), since
 /// creating a quote requires a valid CustomerId.
 /// </summary>
+/// <remarks>
+/// The constructor receives ApiTestFixture and stores its ApiClient in _api. The single test builds a
+/// CreateQuoteRequest for customer 1 via QuoteFactory, sends POST /quotes with _api, and asserts on the
+/// response and deserialized Quote. Customer Id 1 must exist in the database.
+/// </remarks>
 public class QuotesApiTests : IClassFixture<ApiTestFixture>
 {
     // The shared ApiClient (from Shared.Clients) that the fixture created. It already has BaseUrl and
