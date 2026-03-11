@@ -1,0 +1,16 @@
+# Quick local SQL Server for the insurance demo. Run: docker compose up -d
+# Connection: Server=localhost,1433;Database=InsuranceDemo;User Id=sa;Password=InsuranceDemo1!;TrustServerCertificate=True;
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "InsuranceDemo1!"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+volumes:
+  sqldata: {}

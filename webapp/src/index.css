@@ -1,0 +1,4 @@
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+a { color: #0a6ed1; }
+input, button { margin: 0.25rem; padding: 0.35rem 0.5rem; }

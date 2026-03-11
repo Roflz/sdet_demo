@@ -1,4 +1,5 @@
 using OpenQA.Selenium;
+using InsuranceAutomationDemo.UiTests.Helpers;
 
 namespace InsuranceAutomationDemo.UiTests.Pages;
 

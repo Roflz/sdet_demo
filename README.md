@@ -9,7 +9,7 @@ A C#/.NET automated testing scaffold for an insurance-themed web app and API. Th
 - **UI tests** – Minimal Selenium layer (WebDriver factory, base/login/quote pages, 1–2 smoke tests).
 - **Shared** – Config, models, API client, DB helper, and test data factories used by both API and UI tests.
 
-Tests are scaffolded so they are ready to run against a real service and database once URLs and connection strings are configured.
+Tests are scaffolded so they are ready to run against a real service and database once URLs and connection strings are configured. **A full description of every test** (what it does, what it asserts, and what it depends on) is in [docs/TEST_CATALOG.md](docs/TEST_CATALOG.md).
 
 ## Why Most Coverage Is at the API Layer
 
@@ -55,40 +55,96 @@ Factories use a simple incrementing seed so each test can get a unique-looking p
 - **Config-driven** – Base URLs and connection strings in `appsettings.json` so the same tests can run locally and in CI.
 - **No over-engineering** – Straightforward classes, minimal abstraction, and only the hooks and helpers needed for the scaffold.
 
-## How to Run Tests
+## Running the Full Stack (API, DB, React, Tests)
 
-1. **Restore and build**
-   ```bash
-   dotnet restore
-   dotnet build
-   ```
+### 1. Database (SQL Server via Docker)
 
-2. **Run all tests**
-   ```bash
-   dotnet test
-   ```
+Start SQL Server and create the database:
 
-3. **Run only API tests**
-   ```bash
-   dotnet test src/ApiTests/ApiTests.csproj
-   ```
+```bash
+docker compose up -d
+# Wait ~10 seconds for SQL Server to start, then run (against master):
+# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -C -i sql/init-db.sql
+# Then run schema and seed against InsuranceDemo:
+# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/schema.sql
+# sqlcmd -S localhost,1433 -U sa -P "InsuranceDemo1!" -d InsuranceDemo -C -i sql/seed.sql
+```
 
-4. **Run only UI tests** (requires Chrome/ChromeDriver)
-   ```bash
-   dotnet test src/UiTests/UiTests.csproj
-   ```
+If you have **Azure Data Studio** or **Sql Server Management Studio**, connect to `localhost,1433` (user `sa`, password `InsuranceDemo1!`), create database `InsuranceDemo`, then run `sql/schema.sql` and `sql/seed.sql` in order.
 
-5. **Configure endpoints and database**
-   - Set `BaseApiUrl`, `UiBaseUrl`, and `DatabaseConnectionString` in `src/ApiTests/appsettings.json` (and `src/UiTests/appsettings.json` for UI) for your environment.
-   - Without a real API, some tests may fail (e.g. 404/connection). DB tests are written to skip when no connection string is set.
+### 2. API (.NET 8)
 
-## What to Implement Next
+```bash
+cd src/Api
+dotnet run
+```
 
-1. **Real API and DB** – Point config at a running API and database; adjust or add tests as needed.
-2. **Auth** – Set `AuthToken` (or switch to OAuth) in config and use it in `ApiClient` for protected endpoints.
-3. **CI** – In GitHub Actions, set secrets for connection strings and base URLs; run `sql/seed.sql` (and schema) before tests if required.
-4. **DB schema** – Add a schema script (e.g. `schema.sql`) that creates `Customers`, `Policies`, `Quotes` if you want to run `seed.sql` and `cleanup.sql` as-is.
-5. **Optional UI** – Add more pages or flows only if you need broader UI coverage after API/DB coverage is solid.
+API runs at **https://localhost:5001** (and http://localhost:5000). Swagger: https://localhost:5001/swagger.  
+Auth is a single API key: set `Auth:ApiKey` in `appsettings.json` (default `test-api-key-12345`). All endpoints require `Authorization: Bearer <ApiKey>`.
+
+### 3. React web app
+
+```bash
+cd webapp
+npm install
+npm run dev
+```
+
+App runs at **http://localhost:5173**. Use **Quotes** to fetch a quote by ID; use **Log in** with API key `test-api-key-12345` so the app can call the API (Vite proxies `/api` to the API).
+
+### 4. Run tests
+
+**Prerequisites:** API and database must be running. Tests use the HTTP endpoint to avoid dev-certificate issues.
+
+Build and run **API tests** (do not run full `dotnet build` while the API is running, or you may get file-lock errors; build only the test project):
+
+```bash
+dotnet build src/ApiTests/ApiTests.csproj
+dotnet test src/ApiTests/ApiTests.csproj
+```
+
+For **UI tests** (Chrome required), start the React app first, then:
+
+```bash
+dotnet test src/UiTests/UiTests.csproj
+```
+
+**Saving test results**  
+By default, `dotnet test` only prints to the console. To save results to files, add logger arguments:
+
+- **TRX and HTML** (run once to get both; open the HTML in a browser for a readable report):
+  ```bash
+  dotnet test src/ApiTests/ApiTests.csproj --logger "trx;LogFileName=ApiTests.trx" --logger "html;LogFileName=ApiTests.html" --results-directory TestResults
+  ```
+  Output: `TestResults/<config>/ApiTests.trx` and `TestResults/<config>/ApiTests.html`
+
+- **TRX only** (good for CI / Azure DevOps):
+  ```bash
+  dotnet test src/ApiTests/ApiTests.csproj --logger "trx;LogFileName=ApiTests.trx" --results-directory TestResults
+  ```
+
+- **Console** (more detail):
+  ```bash
+  dotnet test src/ApiTests/ApiTests.csproj --logger "console;verbosity=detailed"
+  ```
+
+The `TestResults` folder is gitignored so generated reports are not committed.
+
+**Test configuration** (`src/ApiTests/appsettings.json`):
+
+| Setting | Purpose |
+|--------|---------|
+| **BaseApiUrl** | API base URL. Use **http://localhost:5000** for tests (avoids untrusted HTTPS cert). |
+| **DatabaseConnectionString** | Same as API (e.g. Docker: `Server=localhost,1433;Database=InsuranceDemo;User Id=sa;Password=InsuranceDemo1!;TrustServerCertificate=True;`). DB tests skip if empty. |
+| **AuthToken** | Must match API `Auth:ApiKey` (e.g. `test-api-key-12345`). Sent as `Authorization: Bearer <token>`. |
+| **UiBaseUrl** | React app URL for UI tests (e.g. `http://localhost:5173`). |
+
+## How to Run Tests (without full stack)
+
+- **API tests** require the API and (for DB tests) the database to be running. Run `dotnet build src/ApiTests/ApiTests.csproj` then `dotnet test src/ApiTests/ApiTests.csproj`. If the API is already running, build only the test project to avoid "file in use" errors when building the solution.
+- **UI tests** require Chrome and the React app (`npm run dev` in `webapp`). Run `dotnet test src/UiTests/UiTests.csproj`.
+
+For a **full solution build** (e.g. after code changes to Shared or Api), stop the API first (Ctrl+C), then `dotnet build`, then start the API again.
 
 ## Project Layout
 
@@ -96,14 +152,21 @@ Factories use a simple incrementing seed so each test can get a unique-looking p
 InsuranceAutomationDemo/
   InsuranceAutomationDemo.sln
   src/
+    Api/                # ASP.NET Core API (customers, policies, quotes, Bearer API key auth)
     ApiTests/           # API tests, fixtures, appsettings
     UiTests/            # Selenium smoke tests, pages, WebDriver factory
     Shared/             # Config, Models, Clients (ApiClient), Database (DbHelper), Fixtures (factories), Helpers
+  webapp/               # React (Vite) – Login, Quote pages, calls API
   sql/
+    init-db.sql         # Create InsuranceDemo database
+    schema.sql          # Create Customers, Policies, Quotes tables
     seed.sql
     cleanup.sql
     schema_queries.sql
+  docker-compose.yml    # SQL Server for local dev
   .github/workflows/
     ci.yml
+  docs/
+    TEST_CATALOG.md   # Detailed description of every test
   README.md
 ```

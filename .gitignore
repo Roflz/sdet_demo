@@ -1,0 +1,32 @@
+# Test results (when using --results-directory TestResults)
+TestResults/
+
+# Local / generated docs (do not commit)
+docs/TESTING_ARCHITECTURE_PLAIN_ENGLISH.md
+
+# Build outputs
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# NuGet
+packages/
+*.nupkg
+project.lock.json
+
+# Node / webapp
+webapp/node_modules/
+webapp/dist/
+npm-debug.log*
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

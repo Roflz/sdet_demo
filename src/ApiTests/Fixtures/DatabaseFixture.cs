@@ -3,7 +3,7 @@ using InsuranceAutomationDemo.Shared.Helpers;
 
 namespace InsuranceAutomationDemo.ApiTests.Fixtures;
 
-public class DatabaseFixture : IAsyncLifetime, IAsyncDisposable
+public class DatabaseFixture : IAsyncLifetime
 {
     public DbHelper Db { get; private set; } = null!;
 
@@ -17,5 +17,9 @@ public class DatabaseFixture : IAsyncLifetime, IAsyncDisposable
         await Task.CompletedTask;
     }
 
-    public ValueTask DisposeAsync() => Db?.DisposeAsync() ?? ValueTask.CompletedTask;
+    public async Task DisposeAsync()
+    {
+        if (Db != null)
+            await Db.DisposeAsync();
+    }
 }

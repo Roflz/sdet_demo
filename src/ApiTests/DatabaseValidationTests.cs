@@ -21,6 +21,8 @@ public class DatabaseValidationTests : IClassFixture<ApiTestFixture>, IAsyncLife
         _api = fixture.ApiClient;
     }
 
+    public Task DisposeAsync() => Task.CompletedTask;
+
     public async Task InitializeAsync()
     {
         var basePath = AppContext.BaseDirectory;

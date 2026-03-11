@@ -71,7 +71,8 @@ public class DbHelper : IAsyncDisposable
     public async Task<int> GetCustomerPolicyCountAsync(int customerId, CancellationToken ct = default)
     {
         const string sql = "SELECT COUNT(*) FROM Policies WHERE CustomerId = @customerId";
-        return await ExecuteScalarAsync<int>(sql, ct, new SqlParameter("@customerId", customerId)) ?? 0;
+        int? count = await ExecuteScalarAsync<int>(sql, ct, new SqlParameter("@customerId", customerId));
+        return count ?? 0;
     }
 
     public async Task<CustomerPolicyRow?> GetCustomerWithPolicyAsync(int customerId, int policyId, CancellationToken ct = default)
