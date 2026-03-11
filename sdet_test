@@ -1,0 +1,34 @@
+Navigate to weather.com
+# Actions
+# Use Selenium
+# Open a browser, identify the URL element and input weather.com
+
+# Verifications:
+# URL contains weather.com
+# Pick some unqiue identifiers from the weather.com website. Verify that these exist correctly.
+# Maybe check that the search bar on weather.com is there.
+
+Search for Denver, Colorado
+# Selenium: input text into search bar, and hit enter to search.
+# UI based: check that denver colorado got loaded correctly. Use text markers on the screen. (search results)
+
+# API: monitor the traffic when you send the search request. Verify values and schema are valid.
+
+Navigate to the page for the city above
+# Selenium: click on denver, colorado
+# monitor API traffic
+
+Store current weather conditions, including
+
+Temperature
+Humidity
+Pressure
+UV Index
+
+BONUS: Identify and display the API call that returns the data above upon selecting a location
+
+Navigate back to weather.com home page
+
+Search for the same city by zip-code (80201)
+
+Compare the weather conditions to the values from step 3
